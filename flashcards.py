@@ -32,7 +32,7 @@ class FlashcardGenerator:
         llm = ChatOpenAI(
             openai_api_key=api_key,
             model=model,
-            temperature=0.5
+            temperature=0.4
         )
         
         # Create the prompt for flashcard generation

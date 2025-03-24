@@ -135,7 +135,7 @@ if 'initialized' not in st.session_state:
     st.session_state.flashcard_generator = FlashcardGenerator()
     st.session_state.transcription_model = "gpt-4o-transcribe"
     # Speech-related session state
-    st.session_state.enable_speech = False
+    st.session_state.enable_speech = True
     st.session_state.selected_voice = "nova"
     st.session_state.audio_file_path = None
 
@@ -798,7 +798,7 @@ if st.session_state.should_transcribe:
                         progress_callback=lambda p: transcribe_progress.progress(p),
                         model=st.session_state.transcription_model
                     )
-                    
+                    st.session_state.transcript = transcript
                     # Store results
                     result = {
                         'transcript': transcript,
@@ -877,6 +877,7 @@ if st.session_state.should_transcribe:
                     progress_callback=lambda p: transcribe_progress.progress(min(30 + int(p * 0.7), 100)),
                     model=st.session_state.transcription_model 
                 )
+                st.session_state.transcript = transcript
                 
                 # Store results
                 result = {

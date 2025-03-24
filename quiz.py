@@ -7,7 +7,7 @@ class QuizGenerator:
     def __init__(self):
         pass
     
-    def generate_quiz(self, rag_system, api_key, transcript=None, model="gpt-4o", temperature=0.5):
+    def generate_quiz(self, rag_system, api_key, transcript=None, model="gpt-4o", temperature=0.4):
         """
         Generate quiz questions based on the video transcript
         
