@@ -19,7 +19,7 @@ class VideoRAG:
         self.embeddings = OpenAIEmbeddings(openai_api_key=self.api_key)
         self.llm = ChatOpenAI(
             openai_api_key=self.api_key,
-            model="gpt-4o-mini",
+            model="gpt-4o",
             temperature=0
         )
         self.chunk_size = chunk_size

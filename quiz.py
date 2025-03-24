@@ -7,7 +7,7 @@ class QuizGenerator:
     def __init__(self):
         pass
     
-    def generate_quiz(self, rag_system, api_key, transcript=None, model="gpt-4o-mini", temperature=0.2):
+    def generate_quiz(self, rag_system, api_key, transcript=None, model="gpt-4o", temperature=0.5):
         """
         Generate quiz questions based on the video transcript
         
@@ -31,9 +31,11 @@ class QuizGenerator:
             model=model,
             temperature=temperature
         )
+
+        num_questions = 10
         
-        # Use the same retriever from the RAG system
-        prompt = """Based on the video transcript, generate 5 multiple-choice questions to test understanding of the content.
+        # Prompt to generate quiz
+        prompt = f"""Based on the video transcript, generate {num_questions} multiple-choice questions to test understanding of the content.
         For each question:
         1. The question should be specific to information mentioned in the video
         2. Include 4 options (A, B, C, D)

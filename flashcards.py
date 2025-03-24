@@ -11,7 +11,7 @@ class FlashcardGenerator:
         """Initialize the flashcard generator."""
         pass
     
-    def generate_flashcards(self, rag_system, api_key, transcript=None, num_cards=10, model="gpt-4o-mini") -> List[Dict[str, str]]:
+    def generate_flashcards(self, rag_system, api_key, transcript=None, num_cards=10, model="gpt-4o") -> List[Dict[str, str]]:
         """
         Generate flashcards based on the video content.
         
@@ -32,7 +32,7 @@ class FlashcardGenerator:
         llm = ChatOpenAI(
             openai_api_key=api_key,
             model=model,
-            temperature=0.2
+            temperature=0.5
         )
         
         # Create the prompt for flashcard generation

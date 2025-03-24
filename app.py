@@ -238,7 +238,7 @@ def generate_flashcards():
                 st.session_state.rag_system, 
                 api_key,
                 transcript=transcript,  # Pass the transcript to the generator
-                num_cards=8  # Default number of cards to generate
+                num_cards=10  # Default number of cards to generate
             )
             
             # Check if we got valid flashcards

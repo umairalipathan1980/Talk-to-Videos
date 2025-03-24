@@ -5,7 +5,7 @@ class SummaryGenerator:
     def __init__(self):
         pass
     
-    def generate_summary(self, rag_system, api_key, model="gpt-4o-mini", temperature=0.2):
+    def generate_summary(self, rag_system, api_key, model="gpt-4o", temperature=0.2):
         """
         Generate a hierarchical bullet-point summary from the video transcript
         
