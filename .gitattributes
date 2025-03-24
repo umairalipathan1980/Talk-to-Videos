@@ -1,0 +1,2 @@
+ffmpeg-2025-03-10-git-87e5da9067-essentials_build/ffmpeg-2025-03-10-git-87e5da9067-essentials_build/bin/*.exe filter=lfs diff=lfs merge=lfs -text
+*.exe filter=lfs diff=lfs merge=lfs -text

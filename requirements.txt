@@ -1,0 +1,10 @@
+yt-dlp
+openai
+langchain-openai
+langchain-text-splitters
+langchain
+streamlit
+faiss-cpu
+python-dotenv
+markdown
+pydub
