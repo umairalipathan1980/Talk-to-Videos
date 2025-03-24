@@ -810,7 +810,7 @@ if st.session_state.should_transcribe:
                     transcribe_progress.progress(100)
                     transcribe_status.text("Transcription complete!")
                     
-                    # Step 4: Display results
+                    # Display results
                     time.sleep(1)
                     
                     # Remove progress indicators
@@ -826,17 +826,6 @@ if st.session_state.should_transcribe:
                     st.subheader("Download Files")
                     transcript_link = get_download_link(result['transcript_path'], "Download Transcript (TXT)")
                     st.markdown(transcript_link, unsafe_allow_html=True)
-                    
-                    
-                    # if keep_audio:
-                    #     audio_link = get_download_link(result['audio_path'], "Download Audio (MP3)")
-                    #     st.markdown(audio_link, unsafe_allow_html=True)
-                    # else:
-                    #     # Delete audio file if not keeping it
-                    #     os.remove(result['audio_path'])
-                    #     st.info("Audio file has been deleted as per your settings.")
-                
-                    # Delete audio file 
                     os.remove(result['audio_path'])
                     
                 # Set the video title if not already set
@@ -877,10 +866,7 @@ if st.session_state.should_transcribe:
                     ffmpeg_path, '-i', temp_file_path, '-q:a', '0', '-map', 'a', 
                     audio_path, '-y'
                 ], check=True, capture_output=True)
-                
-                # Remove the original video file to save space
-                # if not keep_audio:
-                #     os.remove(temp_file_path)
+
                 os.remove(temp_file_path)
                 transcribe_status.text("Transcribing audio...")
                 transcribe_progress.progress(30)
@@ -917,16 +903,8 @@ if st.session_state.should_transcribe:
                 st.subheader("Download Files")
                 transcript_link = get_download_link(result['transcript_path'], "Download Transcript (TXT)")
                 st.markdown(transcript_link, unsafe_allow_html=True)
-                
-                # if keep_audio:
-                #     audio_link = get_download_link(result['audio_path'], "Download Audio (MP3)")
-                #     st.markdown(audio_link, unsafe_allow_html=True)
-                # else:
-                #     # Delete audio file if not keeping it
-                #     os.remove(result['audio_path'])
-                #     st.info("Audio file has been deleted as per your settings.")
 
-                # Delete audio file if not keeping it
+                # Delete audio file 
                 os.remove(result['audio_path'])
                 
                 # Set the video title

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk-to-Videos Codebase Visualization</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6c757d;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .project-structure {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .file-tree {
+            width: 25%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-right: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .file-content {
+            width: 75%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .tree-item {
+            margin-bottom: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .tree-folder {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        
+        .tree-file {
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+        
+        .tree-file.active {
+            background-color: var(--light-color);
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        
+        .function-list {
+            margin-bottom: 20px;
+        }
+        
+        .function-header {
+            background-color: var(--light-color);
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary-color);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .function-name {
+            font-family: monospace;
+            font-size: 16px;
+            color: var(--dark-color);
+        }
+        
+        .function-info {
+            margin-left: 15px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 2px solid #eee;
+        }
+        
+        .file-heading {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-path {
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .class-heading {
+            background-color: var(--info-color);
+            color: white;
+            padding: 5px 10px;
+            margin: 20px 0 10px 0;
+            border-radius: 3px;
+        }
+        
+        .module-description {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border-left: 3px solid var(--success-color);
+        }
+        
+        .function-comment {
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+        
+        .code-count {
+            color: var(--secondary-color);
+            font-size: 12px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Talk-to-Videos Codebase Visualization</h1>
+        
+        <input type="text" id="search" class="search-box" placeholder="Search for files or functions...">
+        
+        <div class="project-structure">
+            <div class="file-tree" id="fileTree">
+                <div class="tree-item tree-folder" onclick="toggleFolder(this)">
+                    <span>📁 Project Root</span>
+                    <div style="display: block; margin-left: 15px;">
+                        <div class="tree-item tree-file" onclick="showFile('app.py')">app.py</div>
+                        <div class="tree-item tree-file" onclick="showFile('transcriber.py')">transcriber.py</div>
+                        <div class="tree-item tree-file" onclick="showFile('rag_system.py')">rag_system.py</div>
+                        <div class="tree-item tree-file" onclick="showFile('quiz.py')">quiz.py</div>
+                        <div class="tree-item tree-file" onclick="showFile('flashcards.py')">flashcards.py</div>
+                        <div class="tree-item tree-file" onclick="showFile('summary.py')">summary.py</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="file-content" id="fileContent">
+                <div class="module-description">
+                    <p>Select a file from the tree to view its functions and structure.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File content data structure
+        const fileData = {
+            'app.py': {
+                type: 'Main Application',
+                description: 'Streamlit web application that provides the user interface and orchestrates all components.',
+                functions: [
+                    {
+                        name: 'clear_all()',
+                        comment: 'Clears all session state variables and restarts the app'
+                    },
+                    {
+                        name: 'get_api_key()',
+                        comment: 'Retrieves OpenAI API key from environment variables'
+                    },
+                    {
+                        name: 'text_to_speech(text, api_key, voice)',
+                        comment: 'Converts text to audio using OpenAI\'s TTS API'
+                    },
+                    {
+                        name: 'autoplay_audio(audio_bytes)',
+                        comment: 'Automatically plays audio in the Streamlit interface'
+                    },
+                    {
+                        name: 'record_audio(duration, sample_rate)',
+                        comment: 'Records audio from the user\'s microphone with visual countdown'
+                    },
+                    {
+                        name: 'save_audio(audio, filename, sample_rate)',
+                        comment: 'Saves recorded audio to a file'
+                    },
+                    {
+                        name: 'transcribe_audio(audio_file, api_key)',
+                        comment: 'Transcribes speech from an audio file using OpenAI'
+                    },
+                    {
+                        name: 'is_local_file(path)',
+                        comment: 'Checks if a path points to an existing local file'
+                    },
+                    {
+                        name: 'generate_flashcards()',
+                        comment: 'Generates flashcards from video content using the FlashcardGenerator'
+                    },
+                    {
+                        name: 'next_flashcard(), prev_flashcard(), toggle_answer()',
+                        comment: 'Navigation functions for flashcard interface'
+                    },
+                    {
+                        name: 'get_download_link(file_path, link_text)',
+                        comment: 'Creates a download link for a file (transcript, etc.)'
+                    },
+                    {
+                        name: 'is_youtube_url(url)',
+                        comment: 'Validates if a URL is a YouTube video link'
+                    },
+                    {
+                        name: 'init_rag_system(transcript, video_title)',
+                        comment: 'Initializes the RAG system with video transcript'
+                    },
+                    {
+                        name: 'display_video_info(info)',
+                        comment: 'Displays video metadata (title, duration, etc.)'
+                    },
+                    {
+                        name: 'handle_question_submission()',
+                        comment: 'Processes user questions and gets answers from RAG system'
+                    },
+                    {
+                        name: 'handle_speech_input()',
+                        comment: 'Processes voice input for voice-based questioning'
+                    },
+                    {
+                        name: 'on_url_change(), on_file_change()',
+                        comment: 'Event handlers for URL or file upload changes'
+                    },
+                    {
+                        name: 'on_transcribe_click()',
+                        comment: 'Handles the transcribe button click event'
+                    },
+                    {
+                        name: 'create_new_quiz(transcript)',
+                        comment: 'Forces generation of a new quiz'
+                    },
+                    {
+                        name: 'generate_quiz()',
+                        comment: 'Generates quiz questions from video content'
+                    },
+                    {
+                        name: 'submit_quiz()',
+                        comment: 'Handles quiz submission and calculates results'
+                    },
+                    {
+                        name: 'show_summary_popup()',
+                        comment: 'Displays hierarchical summary in a popup'
+                    }
+                ]
+            },
+            'transcriber.py': {
+                type: 'Core Module',
+                description: 'Handles video downloading, audio extraction, and speech-to-text transcription.',
+                functions: [
+                    {
+                        name: 'process_video_download(youtube_url, output_dir)',
+                        comment: 'Downloads audio from a YouTube video using yt-dlp'
+                    },
+                    {
+                        name: 'process_video_transcribe(audio_path, output_dir, api_key, progress_callback, model)',
+                        comment: 'Transcribes audio using OpenAI API, with chunking for large files'
+                    },
+                    {
+                        name: 'split_and_transcribe(audio_path, client, model, progress_callback, max_size_mb, max_duration_seconds, audio)',
+                        comment: 'Splits audio into chunks and transcribes each chunk'
+                    },
+                    {
+                        name: 'get_video_info(youtube_url)',
+                        comment: 'Fetches video metadata without downloading the video'
+                    },
+                    {
+                        name: 'get_video_id(youtube_url)',
+                        comment: 'Extracts YouTube video ID from URL with caching'
+                    },
+                    {
+                        name: 'get_transcript_path(youtube_url, output_dir)',
+                        comment: 'Gets expected transcript file path for a YouTube URL'
+                    },
+                    {
+                        name: 'transcript_exists(youtube_url, output_dir)',
+                        comment: 'Checks if transcript already exists for a video'
+                    },
+                    {
+                        name: 'verify_ffmpeg()',
+                        comment: 'Verifies FFmpeg is available and returns paths to binaries'
+                    },
+                    {
+                        name: 'save_transcript(transcript, output_path)',
+                        comment: 'Saves transcript text to a file'
+                    },
+                    {
+                        name: 'process_video(youtube_url, output_dir, api_key, model)',
+                        comment: 'Combined function that handles download and transcription'
+                    },
+                    {
+                        name: 'read_transcript(youtube_url, output_dir)',
+                        comment: 'Reads existing transcript for a video'
+                    }
+                ]
+            },
+            'rag_system.py': {
+                type: 'Core Module',
+                description: 'Implements Retrieval Augmented Generation (RAG) system for answering questions about video content.',
+                classes: [
+                    {
+                        name: 'VideoRAG',
+                        functions: [
+                            {
+                                name: '__init__(api_key, chunk_size, chunk_overlap)',
+                                comment: 'Initializes the RAG system with OpenAI API and configuration'
+                            },
+                            {
+                                name: 'create_vector_store(transcript)',
+                                comment: 'Creates FAISS vector store from the video transcript chunks'
+                            },
+                            {
+                                name: 'set_chat_history(chat_history)',
+                                comment: 'Updates conversation memory with external chat history'
+                            },
+                            {
+                                name: 'ask(question, chat_history)',
+                                comment: 'Retrieves relevant chunks and generates an answer to the question'
+                            }
+                        ]
+                    }
+                ]
+            },
+            'quiz.py': {
+                type: 'Feature Module',
+                description: 'Generates interactive quizzes based on video content.',
+                classes: [
+                    {
+                        name: 'QuizGenerator',
+                        functions: [
+                            {
+                                name: '__init__()',
+                                comment: 'Initializes the quiz generator'
+                            },
+                            {
+                                name: 'generate_quiz(rag_system, api_key, transcript, model, temperature)',
+                                comment: 'Generates multiple-choice questions from video content'
+                            },
+                            {
+                                name: 'parse_quiz_response(response_text)',
+                                comment: 'Parses LLM output into structured quiz questions with options'
+                            },
+                            {
+                                name: 'calculate_quiz_results(questions, user_answers)',
+                                comment: 'Evaluates user answers against correct answers'
+                            }
+                        ]
+                    }
+                ]
+            },
+            'flashcards.py': {
+                type: 'Feature Module',
+                description: 'Generates educational flashcards from video content.',
+                classes: [
+                    {
+                        name: 'FlashcardGenerator',
+                        functions: [
+                            {
+                                name: '__init__()',
+                                comment: 'Initializes the flashcard generator'
+                            },
+                            {
+                                name: 'generate_flashcards(rag_system, api_key, transcript, num_cards, model)',
+                                comment: 'Creates educational flashcards with front/back sides from video content'
+                            },
+                            {
+                                name: 'shuffle_flashcards(flashcards)',
+                                comment: 'Randomizes the order of flashcards'
+                            }
+                        ]
+                    }
+                ]
+            },
+            'summary.py': {
+                type: 'Feature Module',
+                description: 'Generates hierarchical summaries of video content.',
+                classes: [
+                    {
+                        name: 'SummaryGenerator',
+                        functions: [
+                            {
+                                name: '__init__()',
+                                comment: 'Initializes the summary generator'
+                            },
+                            {
+                                name: 'generate_summary(rag_system, api_key, model, temperature)',
+                                comment: 'Creates a hierarchical bullet-point summary from video content'
+                            },
+                            {
+                                name: 'create_summary_popup_html(summary_content)',
+                                comment: 'Formats summary as interactive HTML popup with CSS styling'
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        function toggleFolder(element) {
+            const content = element.querySelector('div');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        }
+
+        function showFile(fileName) {
+            // Clear active class from all files
+            document.querySelectorAll('.tree-file').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to clicked file
+            event.target.classList.add('active');
+            
+            const fileInfo = fileData[fileName];
+            if (!fileInfo) return;
+            
+            let content = `
+                <div class="file-heading">
+                    <h2>${fileName}</h2>
+                    <span class="file-type">${fileInfo.type}</span>
+                </div>
+                <div class="module-description">
+                    <p>${fileInfo.description}</p>
+                </div>
+            `;
+            
+            // If the file has classes
+            if (fileInfo.classes) {
+                fileInfo.classes.forEach(cls => {
+                    content += `<div class="class-heading">${cls.name}</div>`;
+                    content += `<div class="function-list">`;
+                    
+                    cls.functions.forEach(func => {
+                        content += `
+                            <div class="function-header">
+                                <span class="function-name">${func.name}</span>
+                                <span class="code-count">${fileName}</span>
+                            </div>
+                            <div class="function-info">
+                                <div class="function-comment">${func.comment}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    content += `</div>`;
+                });
+            }
+            
+            // If the file has direct functions
+            if (fileInfo.functions) {
+                content += `<div class="function-list">`;
+                
+                fileInfo.functions.forEach(func => {
+                    content += `
+                        <div class="function-header">
+                            <span class="function-name">${func.name}</span>
+                            <span class="code-count">${fileName}</span>
+                        </div>
+                        <div class="function-info">
+                            <div class="function-comment">${func.comment}</div>
+                        </div>
+                    `;
+                });
+                
+                content += `</div>`;
+            }
+            
+            document.getElementById('fileContent').innerHTML = content;
+        }
+
+        // Search functionality
+        document.getElementById('search').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (!searchTerm) {
+                // Reset display when search is empty
+                document.querySelectorAll('.tree-file').forEach(el => {
+                    el.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Search in files and functions
+            for (const fileName in fileData) {
+                const file = document.querySelector(`.tree-file[onclick="showFile('${fileName}')"]`);
+                let fileMatches = fileName.toLowerCase().includes(searchTerm);
+                let functionMatches = false;
+                
+                // Check if any function in the file matches
+                if (fileData[fileName].functions) {
+                    functionMatches = fileData[fileName].functions.some(func => 
+                        func.name.toLowerCase().includes(searchTerm) || 
+                        func.comment.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                // Check if any class function matches
+                if (fileData[fileName].classes) {
+                    fileData[fileName].classes.forEach(cls => {
+                        if (cls.functions) {
+                            const classFunctionMatches = cls.functions.some(func => 
+                                func.name.toLowerCase().includes(searchTerm) || 
+                                func.comment.toLowerCase().includes(searchTerm)
+                            );
+                            functionMatches = functionMatches || classFunctionMatches;
+                        }
+                    });
+                }
+                
+                // Show or hide based on matches
+                if (file) {
+                    file.style.display = (fileMatches || functionMatches) ? 'block' : 'none';
+                }
+            }
+        });
+
+        // Show app.py by default
+        showFile('app.py');
+    </script>
+</body>
+</html>

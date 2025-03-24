@@ -188,7 +188,7 @@ def process_video_transcribe(audio_path, output_dir, api_key, progress_callback=
 def split_and_transcribe(audio_path, client, model, progress_callback=None, 
                          max_size_mb=25, max_duration_seconds=1500, audio=None):
     """
-    Split an audio file into chunks and transcribe each chunk using only the selected model
+    Split an audio file into chunks and transcribe each chunk 
     
     Args:
         audio_path: Path to the audio file
@@ -214,7 +214,6 @@ def split_and_transcribe(audio_path, client, model, progress_callback=None,
     
     chunks_by_size = math.ceil(file_size_mb / (max_size_mb * 0.9))  # Use 90% of max to be safe
     chunks_by_duration = math.ceil(duration_seconds / (max_duration_seconds * 0.95))  # Use 95% of max to be safe
-    
     num_chunks = max(chunks_by_size, chunks_by_duration)
     
     print(f"Splitting audio into {num_chunks} chunks based on size ({chunks_by_size}) and duration ({chunks_by_duration})")
@@ -251,7 +250,7 @@ def split_and_transcribe(audio_path, client, model, progress_callback=None,
         chunk_duration = len(chunk) / 1000
         print(f"Chunk {i+1}/{num_chunks}: {chunk_size_mb:.2f}MB, {chunk_duration:.2f}s")
         
-        # Transcribe the chunk using ONLY the selected model (no fallback)
+        # Transcribe the chunk 
         try:
             with open(chunk_path, "rb") as chunk_file:
                 transcript_response = client.audio.transcriptions.create(
@@ -386,59 +385,6 @@ def verify_ffmpeg():
     
     return ffmpeg_path, ffprobe_path
 
-def download_audio(youtube_url, output_path='audio.mp3'):
-    """Download audio from a YouTube video."""
-    print(f"Downloading audio from {youtube_url}...")
-    
-    # Verify and get FFmpeg paths - but don't stop on verification issues
-    try:
-        ffmpeg_path, ffprobe_path = verify_ffmpeg()
-    except Exception as e:
-        print(f"WARNING: FFmpeg verification failed: {e}")
-        print("Attempting to continue with download anyway...")
-    
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'outtmpl': output_path.replace('.mp3', ''),  # yt-dlp adds extension automatically
-        'ffmpeg_location': FFMPEG_LOCATION,
-        'ignoreerrors': True,  # Try to continue on errors
-    }
-    
-    # Print some debug info
-    print(f"Using FFmpeg location: {FFMPEG_LOCATION}")
-    print(f"Output path: {output_path}")
-    print(f"PATH environment variable: {os.environ['PATH']}")
-    
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([youtube_url])
-    except Exception as e:
-        print(f"Error during download: {e}")
-        raise
-    
-    print(f"Audio downloaded to {output_path}")
-    return output_path
-
-def transcribe_audio(audio_path, api_key, model="gpt-4o-transcribe"):
-    """Transcribe audio using OpenAI's Whisper or gpt-4o-transcribe API."""
-    print(f"Transcribing audio with OpenAI's {model} model...")
-    
-    # Initialize the OpenAI client
-    client = OpenAI(api_key=api_key)
-    
-    with open(audio_path, "rb") as audio_file:
-        response = client.audio.transcriptions.create(
-            model=model,
-            file=audio_file
-        )
-    
-    return response.text
-
 def save_transcript(transcript, output_path='transcript.txt'):
     """Save transcript to a text file."""
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -446,7 +392,7 @@ def save_transcript(transcript, output_path='transcript.txt'):
     print(f"Transcript saved to {output_path}")
     return output_path
 
-
+#Function to determine the input type and route it appropriately
 def process_video(youtube_url, output_dir, api_key, model="gpt-4o-transcribe"):
     """
     Process a YouTube video to generate a transcript
