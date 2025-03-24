@@ -1,6 +1,6 @@
 # Talk-to-Videos
 
-An AI-powered video exploration and learning tool that allows you to interact with educational videos through conversation, quizzes, and flashcards.
+An AI-powered video exploration and learning tool that allows you to interact with educational videos through conversation, and generate quizzes and flashcards.
 
 [Workflow of Talk-to-Videos](images/workflow.png)
 
@@ -63,14 +63,16 @@ Upload local video files or provide YouTube URLs to automatically transcribe and
 
 - YouTube video downloads
 - Local video file uploads
-- Multiple transcription models
+- Multiple transcription models (gpt-4o-transcribe and whisper-1)
+- Text-to-speech model: gpt-4o-mini-tts
+- gpt-4o-mini for text answer generation
 - Transcript downloads
 
 [Main UI with Video Preview](images/fig1.png)
 
 ### Intelligent Conversation Interface
 
-After transcription, the application creates a RAG system that enables you to ask questions about any aspect of the video content.
+After transcription, the application creates a RAG system that enables you to ask questions about any aspect of the video content through text or voice.
 
 [Conversation Ready Interface](images/fig1_1.png)
 
@@ -93,7 +95,6 @@ Generate a structured, multi-level summary that organizes the video content into
 Test your understanding with automatically generated quizzes based on the video content.
 
 - Multiple-choice questions covering key concepts
-- Detailed explanations for each answer
 - Performance tracking and scoring
 - Visual results analysis
 
@@ -114,7 +115,7 @@ Study effectively with AI-generated flashcards derived from the video content.
 
 Enable speech input and output for a hands-free experience:
 
-- Record questions with your microphone
+- Input questions with your microphone
 - Hear answers spoken back to you
 - Choose from multiple voice options
 - Seamless text and speech integration
@@ -132,18 +133,10 @@ The application combines several advanced technologies:
 ## Usage Tips
 
 1. **Transcription Models**: Choose between different models based on your needs:
-   - `whisper-1`: Faster, supports up to 25MB files
-   - `gpt-4o-transcribe`: Higher accuracy, supports up to 50MB files
+   - `whisper-1`: OpenAI's legacy transcribing model
+   - `gpt-4o-transcribe`: OpenAI's state-of-the-art, more efficient and efficient transcribing model. 
 
-2. **Keeping Audio**: Toggle the option to keep or delete the extracted audio after transcription
-
-3. **Speech Settings**: Enable speech input/output and select your preferred voice in the sidebar
-
-4. **Clearing Data**: Use the "Clear Everything" button in the sidebar to reset the application state
-
-## License
-
-MIT License
+2. **Speech Settings**: Enable speech input/output and select your preferred voice in the sidebar
 
 ## Acknowledgments
 
