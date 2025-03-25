@@ -59,6 +59,10 @@ maxUploadSize = 1000  # Set the limit to 1000MB (1GB)
 ```bash
 streamlit run app.py
 ```
+OR
+```bash
+python -m streamlit run app.py
+```
 
 ## ✨ Features
 
