@@ -41,12 +41,17 @@ pip install -r requirements.txt
 1. 📥 Download FFmpeg from https://ffmpeg.org/download.html
 2. 📦 Extract the downloaded archive to the main folder of the Talk-to-Videos repository
 
-### Step 4: Set up OpenAI API Key
+### Step 4: Set up OpenAI API Key and Configuration file
 
 Create a `.streamlit/secrets.toml` file with your OpenAI API key:
 
 ```toml
 OPENAI_API_KEY = "your-api-key-here"
+```
+Streamlit has a default file upload limit of 25MB. To increase this limit, create a `.streamlit/config.toml` and paste the following. 
+```toml
+[server]
+maxUploadSize = 1000  # Set the limit to 1000MB (1GB)
 ```
 
 ### Step 5: Run the Application
