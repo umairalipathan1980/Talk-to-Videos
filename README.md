@@ -22,6 +22,8 @@ Perfect for students, educators, researchers, and anyone who wants to extract ma
 
 - 🐍 Python
 - 🎞️ FFmpeg (required for video processing)
+- LangChain
+- OpenAI APIs and libraries
 
 ### Step 1: Clone the Repository
 
