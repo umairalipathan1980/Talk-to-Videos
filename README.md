@@ -20,7 +20,7 @@ Perfect for students, educators, researchers, and anyone who wants to extract ma
 
 ### Prerequisites
 
-- 🐍 Python 3.9+
+- 🐍 Python
 - 🎞️ FFmpeg (required for video processing)
 
 ### Step 1: Clone the Repository
