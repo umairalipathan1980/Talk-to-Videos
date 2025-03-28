@@ -20,10 +20,12 @@ Perfect for students, educators, researchers, and anyone who wants to extract ma
 
 ### Prerequisites
 
-- 🐍 Python
-- 🎞️ FFmpeg (required for video processing)
-- LangChain
-- OpenAI APIs and libraries
+🐍 Python
+🎞️ FFmpeg (required for video processing)
+🔗 LangChain for developing RAG
+🤖 OpenAI APIs and libraries
+🔍 FAISS library for creating in-memory vector store
+📥 yt-dlp for downloading videos from URLs
 
 ### Step 1: Clone the Repository
 
